@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Lilita+One&family=Paytone+One&family=Rowdies:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Lilita+One&family=Paytone+One&family=Rowdies:wght@300;400;700&display=swap');
+
+.inria-sans-light {
+  font-family: "Inria Sans", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.inria-sans-regular {
+  font-family: "Inria Sans", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.inria-sans-bold {
+  font-family: "Inria Sans", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.inria-sans-light-italic {
+  font-family: "Inria Sans", sans-serif;
+  font-weight: 300;
+  font-style: italic;
+}
+
+.inria-sans-regular-italic {
+  font-family: "Inria Sans", sans-serif;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.inria-sans-bold-italic {
+  font-family: "Inria Sans", sans-serif;
+  font-weight: 700;
+  font-style: italic;
+}
+
+.paytone-one-regular {
+  font-family: "Paytone One", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}

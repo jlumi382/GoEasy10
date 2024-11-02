@@ -1,0 +1,199 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Lilita+One&family=Paytone+One&family=Rowdies:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Lilita+One&family=Paytone+One&family=Rowdies:wght@300;400;700&display=swap');
+
+:root {
+    --rosewater: #f5e0dc;
+    --flamingo: #f2cdcd;
+    --pink: #f5c2e7;
+    --mauve: #cba6f7;
+    --red: #f38ba8;
+    --maroon: #eba0ac;
+    --peach: #fab387;
+    --yellow: #f9e2af;
+    --green: #a6e3a1;
+    --teal: #94e2d5;
+    --sky: #89dceb;
+    --sapphire: #74c7ec;
+    --blue: #89b4fa;
+    --lavender: #b4befe;
+    --text: #cdd6f4;
+    --subtext1: #bac2de;
+    --subtext0: #a6adc8;
+    --overlay2: #9399b2;
+    --overlay1: #7f849c;
+    --overlay0: #6c7086;
+    --surface2: #585b70;
+    --surface1: #45475a;
+    --surface0: #313244;
+    --base: #1e1e2e;
+    --mantle: #181825;
+    --crust: #11111b;
+}
+
+body {
+    font-family: "Inria Sans", sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    max-width: 100vw;
+    height: 100vh;
+    background-color: var(--base);
+    color: var(--text);
+    word-wrap: break-word;
+}
+
+header {
+    width: 100%;
+}
+
+main {
+    width: 100%;
+    height: 100%;
+}
+
+footer {
+    background-color: var(--crust);
+    width: 100%;
+    text-align: center;
+}
+
+
+footer a {
+    text-decoration: none;
+    color: var(--red);
+}
+
+footer .container {
+    flex-direction: column;
+}
+
+h1 {
+    font-family: "Paytone One", sans-serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: bold;
+}
+
+p {
+    font-size: clamp(1.3rem, 2vw, 1.6rem);
+}
+
+.container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: nowrap;
+    /*width: 80%;*/
+    /*padding: 5%;*/
+    padding: 10px;
+    margin: 50px;
+}
+
+.flex-item {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.logo-container img {
+    max-height: clamp(45px, 4vw, 60px);
+    width: auto;
+}
+
+#logo-name {
+    font-family: "Paytone One", sans-serif;
+    font-weight: 300;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    color: var(--mauve);
+    /*margin-left: clamp(0.8rem, 1vw, 1rem);*/
+}
+
+#school {
+    width: 700px;
+    height: auto;
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    list-style: none;
+    gap: 10px;
+    padding: 5px;
+}
+
+.navbar-container li a {
+    text-decoration: none;
+    /*margin-left: 10px;*/
+    /*margin-right: 10px;*/
+    color: var(--text);
+    font-weight: bold;
+    /*font-size: clamp(0.7rem, 1.0rem, 1.25rem);*/
+}
+
+.navbar-container li a:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--green);
+}
+
+#vw-home {
+    color: transparent;
+    background-clip: text;
+    background-image: linear-gradient(120deg, var(--peach), var(--red));
+}
+
+.category-nav {
+    width: 100%;
+}
+
+.category-nav button {
+    border-radius: 20px;
+    border: none;
+    width: clamp(10rem, 10vw, 12rem);
+    padding: clamp(0.2rem, 2vw, 0.5rem);
+    background-color: transparent;
+    font-weight: bold;
+    font-size: clamp(1rem, 3vw, 1.2rem);
+    margin: clamp(0.1rem, 0.5vw, 0.2rem);
+    color: var(--base)
+}
+
+.category-nav #classroom {
+    background: linear-gradient(120deg, var(--peach), var(--red));
+}
+
+.category-nav #church {
+    background: linear-gradient(120deg, var(--pink), var(--mauve));
+}
+
+.category-nav #cultural {
+    background: linear-gradient(120deg, var(--teal), var(--green));
+}
+
+.category-nav #court {
+    background: linear-gradient(120deg, var(--sky), var(--blue));
+}
+
+.category-nav #community {
+    background: linear-gradient(120deg, var(--yellow), var(--rosewater));
+}
+
+.reflection #classroom {
+    color: var(--peach);
+}
+
+.reflection #church {
+    color: var(--mauve);
+}
+
+.reflection #cultural {
+    color: var(--green);
+}
+
+.reflection #court {
+    color: var(--blue);
+}
+
+.reflection #community {
+    color: var(--yellow);
+}

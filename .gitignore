@@ -1,0 +1,32 @@
+# Python files
+*.pyc
+__pycache__/
+
+# Environment files
+.env
+*.env
+
+# Flask specific
+instance/
+*.sqlite3
+
+# Cache and logs
+*.log
+*.cache
+__pycache__/
+
+# Vercel specific
+.vercel
+
+# Static files upload folder (if any)
+static/uploads/
+
+# Node modules (if using any Node packages in the app)
+node_modules/
+
+# Virtual environment
+venv/
+
+# Others
+.DS_Store
+

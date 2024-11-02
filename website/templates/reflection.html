@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %} {{ event.name }} - WPE Journal{% endblock %}
+
+{% block content %}
+    <div">
+        <div>
+        <img src="{{ url_for('static', filename='uploads/organizers/' + event.organizer.logo) }}" alt="{{ event.organizer.name }} logo">
+            <div>
+                <div><small>Organizer</small></div>
+                <div>{{ event.organizer.name }}</div>
+            </div>
+        </div>
+        <h1>{{ event.name }}</h1>
+        <div><small>{{ event.date.strftime('%B %-d, %Y') }}</small></div>
+        <div><small>{{ event.venue }}</small></div>
+        <div><small>{{ event.points }} pt/s</small></div>
+    </div>
+    <div>
+        {{ event.reflection|safe }}
+    </div>
+    <div>
+        <figure>
+            <figcaption>Proof</figcaption>
+        <img src="{{ url_for('static', filename='uploads/proof/' + event.proof) }}" alt="Proof of participation in {{ event.name }}">
+    </figure>
+        
+    </div>
+{% endblock %}

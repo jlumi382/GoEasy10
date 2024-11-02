@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form method="POST" action="{{ url_for('admin.add_organizer') if not organizer else url_for('admin.edit_organizer', organizer_id=organizer.id) }}" enctype="multipart/form-data">
+    <label for="name">Organizer Name:</label>
+    <input type="text" id="name" name="name" value="{{ organizer.name if organizer else '' }}" required>
+
+    <label for="short_name">Short Name:</label>
+    <input type="text" id="short_name" name="short_name" value="{{ organizer.short_name if organizer else '' }}" required>
+
+    <label for="logo">Logo:</label>
+    <input type="file" id="logo" name="logo" accept=".png, .jpg, .jpeg, .gif" onchange="handleFileSelect(event)">
+
+    <div class="img-container">
+        <img id="logo-preview" style="max-width: 100%; display: none;">
+    </div>
+
+    <input type="hidden" id="cropped_logo" name="cropped_logo">
+
+    <input type="submit" value="{{ 'Add Organizer' if not organizer else 'Update Organizer' }}">
+</form>
+
+<!-- Include Cropper.js from CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.css" integrity="sha512-087vysR/jM0N5cp13Vlp+ZF9wx6tKbvJLwPO8Iit6J7R+n7uIMMjg37dEgexOshDmDITHYY5useeSmfD1MYiQA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js" integrity="sha512-JyCZjCOZoyeQZSd5+YEAcFgz2fowJ1F1hyJOXgtKu4llIa0KneLcidn5bwfutiehUTiOuK87A986BZJMko0eWQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+let cropper;
+
+function handleFileSelect(event) {
+    const logoInput = document.getElementById('logo');
+    const logoPreview = document.getElementById('logo-preview');
+    const file = logoInput.files[0];
+    
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            logoPreview.src = e.target.result;
+            logoPreview.style.display = 'block';
+            
+            // Initialize or replace the Cropper.js instance
+            if (cropper) {
+                cropper.destroy();
+            }
+            cropper = new Cropper(logoPreview, {
+                aspectRatio: 1, 
+                viewMode: 1
+            });
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+// Before form submit, convert the cropped area to a file
+document.querySelector('form').addEventListener('submit', function(e) {
+    if (cropper) {
+        // Get cropped image data in base64 format
+        cropper.getCroppedCanvas().toBlob((blob) => {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                // Set the cropped image data to the hidden input field
+                document.getElementById('cropped_logo').value = reader.result;
+                
+                // Submit the form
+                e.target.submit();
+            };
+            reader.readAsDataURL(blob);
+        }, 'image/webp'); // You can set the file format (jpeg, png, etc.)
+        e.preventDefault(); // Prevent default form submission until cropping is done
+    }
+});
+</script>
+{% endblock %}

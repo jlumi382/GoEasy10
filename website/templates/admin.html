@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<a href="{{ url_for('admin.editable_events') }}"><button>Edit Event</button></a>
+<a href="{{ url_for('admin.editable_organizers') }}"><button>Edit Organizer</button></a>
+<a href="{{ url_for('admin.upload_summary') }}"><button>Edit Summary</button></a>
+<script>
+    function copyToClipboard(text) {
+        // Create a temporary textarea element
+        const textarea = document.createElement('textarea');
+        textarea.value = text; // Set the text to be copied
+        document.body.appendChild(textarea); // Append it to the body
+        textarea.select(); // Select the text
+        document.execCommand('copy'); // Execute the copy command
+        document.body.removeChild(textarea); // Remove the textarea
+        alert('Text copied to clipboard: ' + text); // Optional alert to confirm
+    }
+</script>
+<button onclick="copyToClipboard('{{ url }}')">Copy link to Website</button>
+{% endblock %}

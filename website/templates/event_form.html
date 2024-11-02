@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<form method="POST" enctype="multipart/form-data" action="{{ url_for('admin.add_event') if not event else url_for('admin.edit_event', event_id=event.id) }}">
+    <label for="name">Event Name:</label>
+    <input type="text" id="name" name="name" value="{{ event.name if event else '' }}" required>
+
+    <label for="short_name">Short Name:</label>
+    <input type="text" id="short_name" name="short_name" value="{{ event.short_name if event else '' }}" required>
+
+    <label for="date">Date:</label>
+    <input type="date" id="date" name="date" value="{{ event.date.strftime('%Y-%m-%d') if event else '' }}" required>
+
+    <label for="venue">Venue:</label>
+    <input type="text" id="venue" name="venue" value="{{ event.venue if event else '' }}" required>
+
+    <label for="points">Points:</label>
+    <input type="number" id="points" name="points" value="{{ event.points if event else '' }}" min="1" max="4" required>
+
+    <label for="reflection">Reflection:</label>
+    <div id="editor-container">{{ event.reflection|safe if event else '' }}</div>
+
+    <input type="hidden" id="reflection" name="reflection" value="{{ event.reflection if event else '' }}" required>
+
+
+    <label for="category_id">Category:</label>
+    <select id="category_id" name="category_id" required>
+        <option value="" disabled {{ 'selected' if not event else '' }}>Select a category</option>
+        {% for category in categories %}
+        <option value="{{ category.id }}" {% if event and event.category_id == category.id %}selected{% endif %}>{{ category.name }}</option>
+        {% endfor %}
+    </select>
+
+    <label for="organizer_id">Organizer:</label>
+    <select id="organizer_id" name="organizer_id" required>
+        <option value="" disabled {{ 'selected' if not event else '' }}>Select an organizer</option>
+        {% for organizer in organizers %}
+        <option value="{{ organizer.id }}" {% if event and event.organizer_id == organizer.id %}selected{% endif %}>{{ organizer.name }}</option>
+        {% endfor %}
+    </select>
+
+    <!-- Proof input -->
+    <label for="proof">Proof:</label>
+    <input type="file" id="proof" name="proof" data-preview="proof-preview" onchange="handleFileSelect(event)" accept=".png, .jpg, .jpeg, .gif" {% if not event %}required{% endif %}>
+    <img id="proof-preview" style="display:none;">
+    <input type="hidden" id="cropped_proof-preview" name="cropped_proof">
+
+    <!-- Thumbnail input -->
+    <label for="thumbnail">Thumbnail:</label>
+    <input type="file" id="thumbnail" name="thumbnail" data-preview="thumbnail-preview" onchange="handleFileSelect(event)" accept=".png, .jpg, .jpeg, .gif" {% if not event %}required{% endif %}>
+    <img id="thumbnail-preview" style="display:none;">
+    <input type="hidden" id="cropped_thumbnail-preview" name="cropped_thumbnail">
+
+    <input type="submit" value="{{ 'Update Event' if event else 'Create Event' }}">
+</form>
+
+<!-- Include Cropper.js from CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.css" integrity="sha512-087vysR/jM0N5cp13Vlp+ZF9wx6tKbvJLwPO8Iit6J7R+n7uIMMjg37dEgexOshDmDITHYY5useeSmfD1MYiQA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js" integrity="sha512-JyCZjCOZoyeQZSd5+YEAcFgz2fowJ1F1hyJOXgtKu4llIa0KneLcidn5bwfutiehUTiOuK87A986BZJMko0eWQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<!-- Main form submit (modified for cropped images handling) -->
+<script>
+let croppers = {}; // A shared object for all croppers
+
+function handleFileSelect(event) {
+    const input = event.target;
+    const previewId = input.dataset.preview;  // Get the associated preview element's ID from data-preview attribute
+    const preview = document.getElementById(previewId);
+    const file = input.files[0];
+
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+            preview.style.display = 'block'; // Display the image preview
+
+            // Initialize or replace the Cropper.js instance for this image
+            if (croppers[previewId]) {
+                croppers[previewId].destroy(); // Clean up any previous instance
+            }
+
+            // Set the correct aspect ratio based on the preview ID
+            let aspectRatio = 16 / 9; // Default for main form (proof and thumbnail)
+            if (previewId === 'logo-preview') {
+                aspectRatio = 1; // Use square aspect ratio for logo in modal
+            }
+
+            croppers[previewId] = new Cropper(preview, {
+                aspectRatio: aspectRatio,
+                viewMode: 1,
+                autoCropArea: 1,
+                background: false
+            });
+        };
+        reader.readAsDataURL(file); // Read file as URL
+    }
+}
+
+// On form submit, handle cropping and submission of both images (proof and thumbnail)
+document.querySelector('form').addEventListener('submit', function(e) {
+    e.preventDefault(); // Prevent default submission until everything is ready
+
+    const proofPromise = new Promise((resolve) => {
+        if (croppers['proof-preview']) {
+            croppers['proof-preview'].getCroppedCanvas().toBlob((blob) => {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    document.getElementById('cropped_proof-preview').value = reader.result;
+                    resolve();
+                };
+                reader.readAsDataURL(blob);
+            }, 'image/webp');
+        } else {
+            resolve(); // Resolve immediately if no cropper exists
+        }
+    });
+
+    const thumbnailPromise = new Promise((resolve) => {
+        if (croppers['thumbnail-preview']) {
+            croppers['thumbnail-preview'].getCroppedCanvas().toBlob((blob) => {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    document.getElementById('cropped_thumbnail-preview').value = reader.result;
+                    resolve();
+                };
+                reader.readAsDataURL(blob);
+            }, 'image/webp');
+        } else {
+            resolve(); // Resolve immediately if no cropper exists
+        }
+    });
+
+    // Wait for both promises to resolve
+    Promise.all([proofPromise, thumbnailPromise]).then(() => {
+        e.target.submit(); // Now submit the form after both images are ready
+    });
+});
+</script>
+
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script>
+    var quill = new Quill('#editor-container', {
+        theme: 'snow',
+        placeholder: 'Write your reflection here...',
+        modules: {
+            toolbar: [
+                ['bold', 'italic', 'underline'],
+                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                ['link', 'blockquote', 'code-block'],
+                [{ 'align': [] }],
+                [{ 'indent': '-1' }, { 'indent': '+1' }],
+                [{ 'header': [1, 2, 3, false] }],
+                [{ 'color': [] }, { 'background': [] }],
+                [{ 'script': 'sub' }, { 'script': 'super' }],
+                [{ 'direction': 'rtl' }]
+            ]
+        }
+    });
+</script>
+<script>
+    document.querySelector('form').addEventListener('submit', function() {
+        var reflectionValue = quill.root.innerHTML;
+        document.getElementById('reflection').value = reflectionValue;
+});
+</script>
+{% endblock %}

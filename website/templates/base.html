@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% block head %}
+    {% endblock %}
+    <title>{% block title %}WPE Journal{% endblock %}</title>
+        <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="item flex-item">
+                <div class="logo-container">
+                    <a href="{{ url_for('views.home') }}">
+                        <img src="{{ url_for('static', filename='logo.png') }}">
+                    </a>
+                </div>
+                {% if not (request.path.startswith('/admin') or request.path in ['/', '/login', '/sign-up']) and not request.path == path %}
+                <h2 id="logo-name">Lumi</h2>
+                {% endif %}
+
+                {% if request.path.startswith('/admin') or request.path in ['/', '/login', '/sign-up'] %}
+                <menu class="navbar-container">
+                    {% if user.is_authenticated %}
+                    <li><a href="{{ url_for('views.home') }}">Home</a></li>
+                    <li><a href="{{ url_for('admin.admin_home') }}">Admin</a></li>
+                    <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+                    {% else %}
+                    <li><a href="{{ url_for('views.home') }}">Home</a></li>
+                    <li><a href="{{ url_for('auth.sign_up') }}">Sign Up</a></li>
+                    <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+                    {% endif %}
+                </menu>
+                {% elif request.path == path %}
+                <menu class="navbar-container">
+                    <li><a href="{{ url_for('views.viewer_home', user_id=user_id) }}">Home</a></li>
+                    <li><a href="{{ url_for('views.category_page', user_id=user_id, category='classroom') }}">Classroom</a></li>
+                    <li><a href="{{ url_for('views.category_page', user_id=user_id, category='church') }}">Church</a></li>
+                    <li><a href="{{ url_for('views.category_page', user_id=user_id, category='cultural') }}">Cultural</a></li>
+                    <li><a href="{{ url_for('views.category_page', user_id=user_id, category='court') }}">Court</a></li>
+                    <li><a href="{{ url_for('views.category_page', user_id=user_id, category='community') }}">Community</a></li>
+                </menu>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="container">
+        {% block content %}
+        {% endblock %}
+        </div>
+    </main>
+    <footer>
+        <div class="container">
+            {% if not user.is_authenticated %}
+            <p>&copy; 2024 Miguel Luis Jumawan. All Rights Reserved.</p>
+            <a href="mailto:miguelluisjumawan@su.edu.ph"><p>miguelluisjumawan@su.edu.ph</p></a>
+            <a href="tel:+639632196204"><p>+63 963-219-6204</p></a>
+            {% else %}
+            <p>&copy; 2024 {{ user.first_name }} {{ user.surname }}. All Rights Reserved.</p>
+            <a href="mailto:{{ user.email }}"><p>{{ user.email }}</p></a>
+            <a href="tel:+63{{ user.phone }}"><p>+63 {{ user.phone[0:3] + '-' + user.phone[3:6] + '-' + user.phone[6:] }}</p></a>
+            {% endif %}
+        </div>
+    </footer>
+</body>
+</html>

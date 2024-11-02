@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}WPE Journal{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block content %}
+    <div class="item">
+        <h1 id="vw-home">Fulfilling the 5Cs of Silliman Education</h1>
+        <p>Silliman University encourages students to grow not only in competence but also in character, faith, and service. This website is dedicated to showcasing how I’ve engaged in meaningful activities that embody the 5Cs of Silliman education, which are classroom, church, culture, court, and community. Each C represents a venue for holistic development, equipping me for a life of purpose, integrity, and positive impact.</p>
+        <nav class="category-nav">
+            <a href="{{ url_for('views.category_page', category='classroom', user_id=user_id)}}"><button id="classroom">Classroom</button></a>
+            <a href="{{ url_for('views.category_page', category='church', user_id=user_id)}}"><button id="church">Church</button></a>
+            <a href="{{ url_for('views.category_page', category='cultural', user_id=user_id)}}"><button id="cultural">Cultural</button></a>
+            <a href="{{ url_for('views.category_page', category='court', user_id=user_id)}}"><button id="court">Court</button></a>
+            <a href="{{ url_for('views.category_page', category='community', user_id=user_id)}}"><button id="community">Community</button></a>
+        </nav>
+    </div>
+    <div class="item">
+        <img id="school" src={{ url_for('static', filename='school.png') }}>
+    </div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}{{ category.name }} - WPE Journal{% endblock %}
+
+{% block content %}
+<div class="reflection">
+    <h1 id="{{ category.short_name }}">{{ category.name }}</h1>
+    <small>{{ total_points }} pts / 8 pts</small>
+    <div>
+        {% for event in events %}
+        <div>
+            <a href="{{ url_for('views.event_page', category=category.short_name, event_id=event.id, user_id=user_id) }}">
+            <img src="{{ url_for('static', filename='uploads/thumbnails/' + event.thumbnail) }}" alt="Thumbnail for {{ event.name }}">
+                <div>
+                    <h3>{{ event.name }}</h3>
+                    <div><small>{{ event.organizer.name }}</small></div>
+                    <div><small>{{ event.date.strftime('%B %-d, %Y') }}</small></div>
+                    <div><small>{{ event.venue }}</small></div>
+                    <div><small>{{ event.points }} pt/s</small></div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

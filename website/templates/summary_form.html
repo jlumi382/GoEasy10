@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form method="POST" enctype="multipart/form-data" action="{{ url_for('admin.upload_summary') }}">
+    <div class="mb-3">
+        <label for="summary" class="form-label">Upload PDF File</label>
+        <input class="form-control" type="file" id="summary" name="summary" accept="application/pdf" required>
+    </div>
+    {% if user.summary %}
+        <button type="submit" class="btn btn-primary">Replace Summary</button>
+    {% else %}
+        <button type="submit" class="btn btn-primary">Add Summary</button>
+    {% endif %}
+</form>
+{% endblock %}
+
